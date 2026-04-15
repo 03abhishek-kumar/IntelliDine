@@ -5,11 +5,11 @@ const Order = require('./models/Order');
 const Ingredient = require('./models/Ingredient');
 
 const sampleOrders = [
-  { items: ['Subz-e-Biryani', 'Raita'], prepTime: 18, priority: 'high', status: 'pending' },
-  { items: ['Murgh-e-Khaas', 'Naan'], prepTime: 24, priority: 'high', status: 'cooking' },
-  { items: ['Zaikedaar Paneer', 'Jeera Rice'], prepTime: 16, priority: 'medium', status: 'pending' },
-  { items: ['Dum Gosht', 'Rumali Roti'], prepTime: 28, priority: 'medium', status: 'done' },
-  { items: ['Noorani Kheer'], prepTime: 10, priority: 'low', status: 'pending' },
+  { orderId: 'ORD-0001', items: ['Subz-e-Biryani', 'Raita'], prepTime: 18, priority: 'high', status: 'pending' },
+  { orderId: 'ORD-0002', items: ['Murgh-e-Khaas', 'Naan'], prepTime: 24, priority: 'high', status: 'cooking' },
+  { orderId: 'ORD-0003', items: ['Zaikedaar Paneer', 'Jeera Rice'], prepTime: 16, priority: 'medium', status: 'pending' },
+  { orderId: 'ORD-0004', items: ['Dum Gosht', 'Rumali Roti'], prepTime: 28, priority: 'medium', status: 'done' },
+  { orderId: 'ORD-0005', items: ['Noorani Kheer'], prepTime: 10, priority: 'low', status: 'pending' },
 ];
 
 const sampleIngredients = [

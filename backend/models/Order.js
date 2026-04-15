@@ -33,20 +33,15 @@ const orderSchema = new mongoose.Schema(
   { timestamps: { createdAt: true, updatedAt: false } }
 );
 
-orderSchema.pre('validate', async function assignOrderId(next) {
+orderSchema.pre('validate', async function assignOrderId() {
   if (this.orderId) {
-    return next();
+    return;
   }
 
-  try {
-    const lastOrder = await this.constructor.findOne().sort({ createdAt: -1 }).select('orderId');
-    const lastOrderNumber = lastOrder?.orderId ? parseInt(lastOrder.orderId.replace('ORD-', ''), 10) : 0;
-    const nextOrderNumber = Number.isNaN(lastOrderNumber) ? 1 : lastOrderNumber + 1;
-    this.orderId = `ORD-${String(nextOrderNumber).padStart(4, '0')}`;
-    return next();
-  } catch (error) {
-    return next(error);
-  }
+  const lastOrder = await this.constructor.findOne().sort({ createdAt: -1 }).select('orderId');
+  const lastOrderNumber = lastOrder?.orderId ? parseInt(lastOrder.orderId.replace('ORD-', ''), 10) : 0;
+  const nextOrderNumber = Number.isNaN(lastOrderNumber) ? 1 : lastOrderNumber + 1;
+  this.orderId = `ORD-${String(nextOrderNumber).padStart(4, '0')}`;
 });
 
 module.exports = mongoose.model('Order', orderSchema);
