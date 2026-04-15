@@ -9,10 +9,16 @@
 
   body {
     @apply text-gray-200 font-inter antialiased;
-    background: #050505;
+    background-color: #06090f;
+    background-image:
+      radial-gradient(circle at 10% 12%, rgba(35, 65, 126, 0.34) 0%, transparent 30%),
+      radial-gradient(circle at 82% 18%, rgba(25, 94, 108, 0.28) 0%, transparent 34%),
+      radial-gradient(circle at 22% 84%, rgba(20, 38, 73, 0.3) 0%, transparent 36%),
+      linear-gradient(145deg, #05070d 0%, #0a111c 54%, #060a12 100%);
     min-height: 100vh;
     background-attachment: fixed;
     position: relative;
+    overflow-x: hidden;
   }
 
   body::before {
@@ -20,12 +26,31 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    opacity: 0.22;
+    opacity: 0.16;
     background-image:
       radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.03), transparent 40%);
+      repeating-linear-gradient(
+        100deg,
+        rgba(255, 255, 255, 0.03) 0px,
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px,
+        transparent 5px
+      );
     background-size: 3px 3px, 100% 100%;
     mix-blend-mode: soft-light;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: -20% -10%;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 25% 25%, rgba(58, 108, 198, 0.2), transparent 35%),
+      radial-gradient(circle at 75% 62%, rgba(49, 153, 170, 0.16), transparent 38%);
+    filter: blur(70px);
+    animation: ambient-drift 24s ease-in-out infinite alternate;
     z-index: 0;
   }
 
@@ -45,12 +70,12 @@
   }
 
   .royal-glass {
-    @apply backdrop-blur-2xl border border-white/15;
-    background: rgba(255, 255, 255, 0.06);
+    @apply backdrop-blur-[20px] border border-white/15;
+    background: rgba(11, 18, 29, 0.52);
     box-shadow:
-      0 14px 44px rgba(0, 0, 0, 0.5),
+      0 18px 48px rgba(2, 6, 14, 0.56),
       0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-      0 0 24px rgba(255, 255, 255, 0.05);
+      0 8px 30px rgba(35, 92, 140, 0.16);
   }
 
   .gold-text-gradient {
@@ -60,9 +85,35 @@
   .gold-border-gradient {
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
+
+  .soft-input {
+    @apply w-full rounded-xl px-4 py-3 text-sm transition-all;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: #e4ebf5;
+  }
+
+  .soft-input::placeholder {
+    color: #7e8998;
+  }
+
+  .soft-input:focus {
+    outline: none;
+    border-color: rgba(111, 186, 255, 0.55);
+    box-shadow: 0 0 0 4px rgba(76, 143, 209, 0.14);
+  }
 }
 
 /* Custom Animations */
+@keyframes ambient-drift {
+  0% {
+    transform: translate3d(-1.5%, -1.2%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(1.8%, 1.6%, 0) scale(1.05);
+  }
+}
+
 @keyframes glow-pulse {
   0% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.15); }
   50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.28); }

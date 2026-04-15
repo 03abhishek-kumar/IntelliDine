@@ -34,13 +34,14 @@ const ROLE_META = {
 
 const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
   <motion.div
-    whileHover={{ x: 4, backgroundColor: 'rgba(255,255,255,0.08)' }}
+    whileHover={{ x: 3, backgroundColor: 'rgba(255,255,255,0.06)' }}
     onClick={onClick}
-    className={`flex items-center gap-4 px-4 py-3 rounded-xl cursor-pointer transition-all backdrop-blur-md
+    className={`relative flex items-center gap-4 px-4 py-3 rounded-xl cursor-pointer transition-all backdrop-blur-md
       ${active
-        ? 'bg-white/12 text-white border-l-4 border-white shadow-[0_8px_20px_rgba(255,255,255,0.12)]'
-        : 'text-gray-300 hover:text-white border-l-4 border-transparent'}`}
+        ? 'bg-white/10 text-slate-100 shadow-[0_8px_22px_rgba(32,89,143,0.22)]'
+        : 'text-slate-400 hover:text-slate-200'}`}
   >
+    {active && <span className="absolute left-0 top-2 bottom-2 w-[2px] rounded-full bg-cyan-300/90 shadow-[0_0_12px_rgba(95,208,255,0.55)]" />}
     <Icon size={18} />
     <span className="text-sm font-medium tracking-wide">{label}</span>
   </motion.div>

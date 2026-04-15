@@ -17,9 +17,9 @@ const AppShell = ({ children }) => (
       <Sidebar />
       <main className="flex-1 overflow-auto relative">
         {/* Ambient glows */}
-        <div className="absolute top-[-240px] right-[-160px] w-[640px] h-[640px] bg-white/8 blur-[140px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-[-260px] left-[-180px] w-[620px] h-[620px] bg-white/7 blur-[140px] rounded-full pointer-events-none" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[540px] h-[540px] bg-white/6 blur-[130px] rounded-full pointer-events-none" />
+        <div className="absolute top-[-240px] right-[-160px] w-[640px] h-[640px] bg-blue-500/12 blur-[150px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-[-260px] left-[-180px] w-[620px] h-[620px] bg-teal-400/10 blur-[150px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[540px] h-[540px] bg-sky-300/8 blur-[140px] rounded-full pointer-events-none" />
         <div className="relative z-10 h-full">{children}</div>
       </main>
     </div>

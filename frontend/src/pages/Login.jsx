@@ -5,10 +5,10 @@ import { Shield, Eye, EyeOff, ChefHat, Crown, UtensilsCrossed, MonitorDot, Alert
 import useAuthStore from '../store/useAuthStore';
 
 const ROLES = [
-  { id: 'customer', label: 'Guest', icon: UtensilsCrossed, border: 'border-white/20', active: 'border-white bg-white/14', text: 'text-white', hint: 'Any email + password (6+ chars)' },
-  { id: 'owner', label: 'Owner', icon: Crown, border: 'border-white/20', active: 'border-white bg-white/14', text: 'text-white', hint: 'owner@intellidine.com / owner123' },
-  { id: 'chef', label: 'Chef', icon: ChefHat, border: 'border-white/20', active: 'border-white bg-white/14', text: 'text-white', hint: 'chef@intellidine.com / chef123' },
-  { id: 'reception', label: 'Reception', icon: MonitorDot, border: 'border-white/20', active: 'border-white bg-white/14', text: 'text-white', hint: 'reception@intellidine.com / reception123' },
+  { id: 'customer', label: 'Guest', icon: UtensilsCrossed, hint: 'Any email + password (6+ chars)' },
+  { id: 'owner', label: 'Owner', icon: Crown, hint: 'owner@intellidine.com / owner123' },
+  { id: 'chef', label: 'Chef', icon: ChefHat, hint: 'chef@intellidine.com / chef123' },
+  { id: 'reception', label: 'Reception', icon: MonitorDot, hint: 'reception@intellidine.com / reception123' },
 ];
 
 const ROLE_ROUTES = { customer: '/customer', owner: '/owner', chef: '/chef', reception: '/reception' };
@@ -51,9 +51,9 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
       {/* Ambient glows */}
-      <div className="absolute -top-32 left-[18%] w-[28rem] h-[28rem] bg-white/10 blur-[130px] rounded-full pointer-events-none" />
-      <div className="absolute -bottom-28 right-[12%] w-[30rem] h-[30rem] bg-white/10 blur-[130px] rounded-full pointer-events-none" />
-      <div className="absolute top-[45%] left-1/2 -translate-x-1/2 w-[30rem] h-[30rem] bg-white/8 blur-[130px] rounded-full pointer-events-none" />
+      <div className="absolute -top-32 left-[18%] w-[28rem] h-[28rem] bg-blue-500/20 blur-[130px] rounded-full pointer-events-none" />
+      <div className="absolute -bottom-28 right-[12%] w-[30rem] h-[30rem] bg-teal-400/16 blur-[130px] rounded-full pointer-events-none" />
+      <div className="absolute top-[45%] left-1/2 -translate-x-1/2 w-[30rem] h-[30rem] bg-slate-400/10 blur-[130px] rounded-full pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -64,21 +64,23 @@ const Login = () => {
         {/* Logo */}
         <div className="text-center mb-10">
           <motion.div
-            animate={{ rotate: [0, 5, -5, 0] }}
+            animate={{ rotate: [0, 4, -4, 0] }}
             transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
-            className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl rotate-45 shadow-gold-glow mb-5"
+            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl rotate-45 mb-5 border border-white/20 bg-white/10 backdrop-blur-xl"
           >
-            <Shield className="text-black -rotate-45" size={28} />
+            <Shield className="text-sky-100 -rotate-45" size={26} />
           </motion.div>
-          <h1 className="text-4xl font-royal gold-text-gradient tracking-tight">INTELLIDINE</h1>
-          <p className="text-gray-400 text-sm mt-2 tracking-widest uppercase">Royal Culinary Management</p>
+          <h1 className="text-4xl font-royal tracking-tight text-slate-100 drop-shadow-[0_0_14px_rgba(134,181,255,0.28)]">
+            INTELLIDINE
+          </h1>
+          <p className="text-slate-400 text-sm mt-2 tracking-widest uppercase">Smart Culinary Management</p>
         </div>
 
         {/* Card */}
-        <div className="royal-glass glass-border rounded-3xl p-8 space-y-7 border-white/20">
+        <div className="royal-glass glass-border rounded-3xl p-8 space-y-7 border-white/20 shadow-[0_24px_60px_rgba(3,12,23,0.5)]">
           {/* Role Selector */}
           <div>
-            <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-3">Select Your Role</p>
+            <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-3">Select Your Role</p>
             <div className="grid grid-cols-2 gap-3">
               {ROLES.map((role) => {
                 const Icon = role.icon;
@@ -89,11 +91,14 @@ const Login = () => {
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleRoleSelect(role.id)}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all duration-300 cursor-pointer backdrop-blur-md
-                      ${isActive ? `${role.active} shadow-[0_8px_24px_rgba(255,255,255,0.08)]` : `border-white/15 bg-white/[0.05] ${role.border} hover:bg-white/10`}`}
+                    className={`relative flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 cursor-pointer backdrop-blur-md
+                      ${isActive
+                        ? 'bg-gradient-to-br from-blue-500/45 to-cyan-400/35 text-sky-50 shadow-[0_10px_30px_rgba(40,138,255,0.35),0_0_0_1px_rgba(156,222,255,0.35)_inset]'
+                        : 'bg-[#0f1623]/70 border border-white/10 text-slate-400 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55)] hover:bg-[#141f2f]/75 hover:text-slate-200'}`}
                   >
-                    <Icon size={20} className={isActive ? role.text : 'text-gray-500'} />
-                    <span className={`text-xs font-medium tracking-widest uppercase ${isActive ? role.text : 'text-gray-500'}`}>
+                    {isActive && <span className="absolute inset-0 rounded-2xl shadow-[0_0_28px_rgba(76,188,255,0.35)] pointer-events-none" />}
+                    <Icon size={20} className={isActive ? 'text-sky-50' : 'text-slate-400'} />
+                    <span className={`text-xs font-semibold tracking-widest uppercase ${isActive ? 'text-sky-50' : 'text-slate-400'}`}>
                       {role.label}
                     </span>
                   </motion.button>
@@ -105,7 +110,7 @@ const Login = () => {
                 key={selectedRole}
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-[10px] text-gray-600 mt-2 text-center"
+                className="text-[10px] text-slate-500 mt-2 text-center"
               >
                 {activeRole.hint}
               </motion.p>
@@ -115,20 +120,19 @@ const Login = () => {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-[10px] text-gray-500 uppercase tracking-widest block mb-2">Email Address</label>
+              <label className="text-[10px] text-slate-400 uppercase tracking-widest block mb-2">Email Address</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); clearError(); }}
                 placeholder="your@email.com"
-                className="w-full bg-white/10 border border-white/15 rounded-xl px-4 py-3 text-gray-100 text-sm placeholder-gray-500
-                  focus:outline-none focus:border-white/40 focus:bg-white/[0.14] transition-all"
+                className="soft-input"
               />
             </div>
 
             <div>
-              <label className="text-[10px] text-gray-500 uppercase tracking-widest block mb-2">Password</label>
+              <label className="text-[10px] text-slate-400 uppercase tracking-widest block mb-2">Password</label>
               <div className="relative">
                 <input
                   type={showPass ? 'text' : 'password'}
@@ -136,13 +140,12 @@ const Login = () => {
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); clearError(); }}
                   placeholder="••••••••"
-                  className="w-full bg-white/10 border border-white/15 rounded-xl px-4 py-3 pr-12 text-gray-100 text-sm placeholder-gray-500
-                    focus:outline-none focus:border-white/40 focus:bg-white/[0.14] transition-all"
+                  className="soft-input pr-12"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPass(p => !p)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-sky-100 transition-colors"
                 >
                   {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -155,10 +158,10 @@ const Login = () => {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-white/8 border border-white/15"
+                  className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-300/25"
                 >
-                  <AlertCircle size={14} className="text-white shrink-0" />
-                  <p className="text-xs text-gray-200">{error}</p>
+                  <AlertCircle size={14} className="text-red-300 shrink-0" />
+                  <p className="text-xs text-red-200">{error}</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -168,15 +171,15 @@ const Login = () => {
               disabled={loading}
               whileHover={{ scale: loading ? 1 : 1.02 }}
               whileTap={{ scale: loading ? 1 : 0.98 }}
-              className="w-full py-3.5 rounded-xl bg-white text-black font-royal tracking-widest text-sm
-                shadow-gold-glow hover:shadow-gold-glow-strong transition-all duration-300 disabled:opacity-60"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#1f4b99] via-[#2277c8] to-[#26a6c0] text-slate-50 font-semibold tracking-[0.18em] text-sm
+                shadow-[0_12px_28px_rgba(37,121,201,0.38)] hover:shadow-[0_16px_32px_rgba(42,155,214,0.46)] transition-all duration-300 disabled:opacity-60"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ repeat: Infinity, duration: 0.8, ease: 'linear' }}
-                    className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full"
+                    className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                   />
                   Authenticating…
                 </span>
@@ -185,7 +188,7 @@ const Login = () => {
           </form>
         </div>
 
-        <p className="text-center text-gray-500 text-xs mt-6 tracking-wider">
+        <p className="text-center text-slate-500 text-xs mt-6 tracking-wider">
           IntelliDine Royal Management System © 2026
         </p>
       </motion.div>
