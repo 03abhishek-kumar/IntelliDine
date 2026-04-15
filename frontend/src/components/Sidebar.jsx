@@ -8,16 +8,14 @@ import {
   TrendingUp,
   History
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 const SidebarItem = ({ icon: Icon, label, active = false }) => (
-  <motion.div 
-    whileHover={{ x: 5, backgroundColor: 'rgba(207, 167, 86, 0.05)' }}
+  <div
     className={`flex items-center gap-4 px-4 py-3 rounded-xl cursor-pointer transition-all ${active ? 'bg-royal-gold/10 text-royal-gold border-l-4 border-royal-gold' : 'text-gray-400 hover:text-royal-gold'}`}
   >
     <Icon size={20} />
     <span className="text-sm font-medium tracking-wide">{label}</span>
-  </motion.div>
+  </div>
 );
 
 const Sidebar = () => {
@@ -39,11 +37,10 @@ const Sidebar = () => {
           <p className="text-[10px] text-royal-gold/60 uppercase tracking-widest mb-1">Current Shift</p>
           <p className="text-sm font-royal text-royal-gold">Evening Service</p>
           <div className="mt-3 w-full bg-white/5 h-1 rounded-full overflow-hidden">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: '65%' }}
+            <div
               className="h-full bg-royal-gold shadow-gold-glow"
-            ></motion.div>
+              style={{ width: '65%' }}
+            ></div>
           </div>
         </div>
       </div>
