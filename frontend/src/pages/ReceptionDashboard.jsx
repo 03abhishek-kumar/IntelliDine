@@ -279,7 +279,13 @@ const ReceptionDashboard = () => {
                 } hover:bg-white/[0.05]`}
               >
                 <span className="text-[11px] font-mono text-slate-500">#{order.id}</span>
-                <span className="font-royal text-slate-200 text-sm">T{order.tableNo}</span>
+                <span className="font-royal text-slate-200 text-sm">
+                  {order.serviceMode === 'delivery'
+                    ? 'Delivery'
+                    : order.serviceMode === 'take_away'
+                      ? 'Take Away'
+                      : `T${order.tableNo}`}
+                </span>
                 <span className="text-[13px] text-slate-300 truncate pr-2">{order.dish}</span>
                 <span className="text-xs text-slate-400 truncate pr-2">{order.customerName}</span>
                 <span className={`inline-flex w-fit text-[11px] font-medium capitalize px-2.5 py-1 rounded-full ${ORDER_STATUS_PILLS[order.status]}`}>
