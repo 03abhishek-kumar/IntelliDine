@@ -17,11 +17,13 @@ const seedData = async () => {
     await Ingredient.deleteMany();
 
     console.log('Seeding Users...');
-    const users = await User.insertMany([
-      { name: 'Customer One', role: 'customer', password: 'password' },
-      { name: 'Head Chef', role: 'chef', password: 'password' },
-      { name: 'Front Desk', role: 'reception', password: 'password' }
-    ]);
+    for (const u of [
+      { name: 'Customer One', email: 'customer@intellidine.com', role: 'customer', password: 'password' },
+      { name: 'Head Chef', email: 'chef@intellidine.com', role: 'chef', password: 'password' },
+      { name: 'Front Desk', email: 'reception@intellidine.com', role: 'reception', password: 'password' }
+    ]) {
+      await User.create(u);
+    }
 
     console.log('Seeding Ingredients...');
     const ingredients = await Ingredient.insertMany([
