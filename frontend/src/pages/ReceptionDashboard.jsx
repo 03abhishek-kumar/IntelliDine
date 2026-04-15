@@ -8,15 +8,15 @@ import useRestaurantStore from '../store/useRestaurantStore';
 import useOrderStore from '../store/useOrderStore';
 
 const TABLE_STATUS_CONFIG = {
-  available: { label: 'Available', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', dot: 'bg-emerald-400' },
-  occupied:  { label: 'Occupied',  color: 'text-amber-400',   bg: 'bg-amber-500/10',   border: 'border-amber-500/30',  dot: 'bg-amber-400' },
-  reserved:  { label: 'Reserved',  color: 'text-purple-400',  bg: 'bg-purple-500/10',  border: 'border-purple-500/30', dot: 'bg-purple-400' },
+  available: { label: 'Available', color: 'text-white', bg: 'bg-white/10', border: 'border-white/25', dot: 'bg-white' },
+  occupied:  { label: 'Occupied',  color: 'text-white', bg: 'bg-white/10', border: 'border-white/25', dot: 'bg-white' },
+  reserved:  { label: 'Reserved',  color: 'text-white', bg: 'bg-white/10', border: 'border-white/25', dot: 'bg-white' },
 };
 
 const ORDER_STATUS_COLORS = {
-  pending: 'text-amber-400',
-  cooking: 'text-blue-400',
-  ready: 'text-emerald-400',
+  pending: 'text-white',
+  cooking: 'text-white',
+  ready: 'text-white',
 };
 
 const SeatModal = ({ table, onClose, onSeat }) => {
@@ -33,7 +33,7 @@ const SeatModal = ({ table, onClose, onSeat }) => {
         className="royal-glass rounded-3xl p-8 w-full max-w-sm space-y-6"
       >
         <div className="flex items-center justify-between">
-          <h3 className="font-royal text-royal-gold text-xl">Seat at Table #{table.number}</h3>
+          <h3 className="font-royal text-white text-xl">Seat at Table #{table.number}</h3>
           <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors"><X size={18} /></button>
         </div>
         <div>
@@ -45,14 +45,14 @@ const SeatModal = ({ table, onClose, onSeat }) => {
             onKeyDown={e => e.key === 'Enter' && name.trim() && onSeat(table.id, name.trim())}
             placeholder="e.g. Rahul Verma"
             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-gray-200 text-sm
-              focus:outline-none focus:border-royal-gold/50 transition-all"
+              focus:outline-none focus:border-white/40 transition-all"
           />
         </div>
         <motion.button
           whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
           disabled={!name.trim()}
           onClick={() => onSeat(table.id, name.trim())}
-          className="w-full py-3 rounded-xl bg-gold-gradient text-royal-black font-royal tracking-widest text-sm
+          className="w-full py-3 rounded-xl bg-white text-black font-royal tracking-widest text-sm
             shadow-gold-glow disabled:opacity-40 transition-all"
         >
           Confirm Seating
@@ -74,7 +74,7 @@ const TableCard = ({ table, orders, onSeat, onClear, onReserve }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full ${cfg.dot} ${table.status === 'occupied' ? 'animate-pulse' : ''}`} />
-          <span className="font-royal text-royal-gold text-lg">T{table.number}</span>
+          <span className="font-royal text-white text-lg">T{table.number}</span>
         </div>
         <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full ${cfg.bg} border ${cfg.border}`}>
           <span className={`text-[10px] uppercase tracking-wider ${cfg.color}`}>{cfg.label}</span>
@@ -108,15 +108,15 @@ const TableCard = ({ table, orders, onSeat, onClear, onReserve }) => {
           <>
             <button
               onClick={() => onSeat(table)}
-              className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20
-                text-emerald-400 text-[10px] uppercase tracking-wider hover:bg-emerald-500/20 transition-all"
+              className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl bg-white/10 border border-white/20
+                text-white text-[10px] uppercase tracking-wider hover:bg-white/20 transition-all"
             >
               <UserPlus size={12} /> Seat
             </button>
             <button
               onClick={() => onReserve(table)}
-              className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl bg-purple-500/10 border border-purple-500/20
-                text-purple-400 text-[10px] uppercase tracking-wider hover:bg-purple-500/20 transition-all"
+              className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl bg-white/10 border border-white/20
+                text-white text-[10px] uppercase tracking-wider hover:bg-white/20 transition-all"
             >
               <Circle size={12} /> Reserve
             </button>
@@ -125,8 +125,8 @@ const TableCard = ({ table, orders, onSeat, onClear, onReserve }) => {
         {(table.status === 'occupied' || table.status === 'reserved') && (
           <button
             onClick={() => onClear(table.id)}
-            className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl bg-red-500/10 border border-red-500/20
-              text-red-400 text-[10px] uppercase tracking-wider hover:bg-red-500/20 transition-all"
+            className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl bg-white/10 border border-white/20
+              text-white text-[10px] uppercase tracking-wider hover:bg-white/20 transition-all"
           >
             <RefreshCw size={12} /> Clear
           </button>

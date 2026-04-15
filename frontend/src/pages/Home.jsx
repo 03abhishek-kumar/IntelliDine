@@ -20,7 +20,7 @@ const DashboardColumn = ({ title, icon: Icon, orders, onAdvance }) => (
       </span>
     </div>
 
-    <div className="flex flex-col gap-4 min-h-[500px] p-2 rounded-3xl bg-white/[0.02] border border-white/5">
+    <div className="flex flex-col gap-4 p-2 rounded-2xl bg-white/[0.03] border border-white/10">
       <AnimatePresence mode="popLayout">
         {orders.map((order) => (
           <RoyalCard key={order.id} order={order} onAdvance={onAdvance} />
@@ -28,8 +28,8 @@ const DashboardColumn = ({ title, icon: Icon, orders, onAdvance }) => (
       </AnimatePresence>
       
       {orders.length === 0 && (
-        <div className="flex-1 flex flex-col items-center justify-center text-gray-600 border-2 border-dashed border-white/5 rounded-2xl">
-          <Icon size={40} className="mb-2 opacity-10" />
+        <div className="h-36 flex flex-col items-center justify-center text-gray-600 border border-dashed border-white/10 rounded-2xl">
+          <Icon size={32} className="mb-2 opacity-20" />
           <p className="text-xs uppercase tracking-widest">Station Empty</p>
         </div>
       )}
@@ -46,45 +46,46 @@ const Home = () => {
   const readyOrders = orders.filter(o => o.status === 'ready');
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-12 pb-20">
+    <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8 pb-20">
       {/* Hero Section */}
-      <section className="relative h-[400px] w-full rounded-[2.5rem] overflow-hidden group shadow-2xl">
+      <section className="relative h-[320px] md:h-[360px] w-full rounded-[2rem] overflow-hidden group border border-white/10 shadow-[0_20px_60px_rgba(2,4,12,0.7)]">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541544741938-0af808871cc0?q=80&w=2069&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-royal-black via-royal-black/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-black/70"></div>
         
-        <div className="absolute bottom-12 left-12 space-y-4 max-w-2xl">
+        <div className="absolute bottom-10 left-8 md:left-12 space-y-3 max-w-2xl">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-2"
           >
-            <div className="h-1 w-12 bg-royal-gold"></div>
-            <span className="text-royal-gold font-medium tracking-[0.3em] uppercase text-xs">
-              Culinary Command Center
+            <div className="h-1 w-10 bg-white/80"></div>
+            <span className="text-white/85 font-medium tracking-[0.24em] uppercase text-[11px]">
+              Kitchen Control
             </span>
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-6xl font-royal gold-text-gradient"
+            className="text-4xl md:text-6xl font-semibold tracking-tight text-white"
           >
-            The Royal Legacy
+            Coding Unbound,
+            <span className="text-white/80"> Service at Speed</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-gray-400 italic text-lg leading-relaxed font-playfair"
+            className="text-gray-300 text-sm md:text-base leading-relaxed max-w-xl"
           >
-            "From the afsaanvi lands of IntelliDine emerges a naayab dastoor, prepared for azeem-o-shaan gatherings. Crafted with royal precision, where every detail is treated with sabr and nazakat."
+            Keep orders, preparation, and serving in one clean operational workspace with real-time updates.
           </motion.p>
         </div>
 
         <motion.div 
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-8 right-12 text-royal-gold cursor-pointer"
+          className="absolute bottom-8 right-8 md:right-12 text-white/75 cursor-pointer"
         >
           <ArrowDown size={32} />
         </motion.div>
@@ -99,15 +100,15 @@ const Home = () => {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="flex items-center gap-4 p-4 royal-glass border-amber-500/50 rounded-2xl bg-amber-500/10">
-              <div className="p-2 bg-amber-500 rounded-lg">
-                <AlertTriangle size={20} className="text-royal-black" />
+            <div className="flex items-center gap-4 p-4 royal-glass border-white/20 rounded-2xl bg-white/8">
+              <div className="p-2 bg-white rounded-lg">
+                <AlertTriangle size={20} className="text-black" />
               </div>
               <div>
-                <h4 className="font-royal text-amber-500 tracking-wider">HIGH KITCHEN LOAD</h4>
-                <p className="text-sm text-amber-500/80">{alert}</p>
+                <h4 className="font-royal text-white tracking-wider">HIGH KITCHEN LOAD</h4>
+                <p className="text-sm text-gray-300">{alert}</p>
               </div>
-              <div className="ml-auto px-4 py-1.5 rounded-full border border-amber-500/30 text-xs text-amber-500 uppercase tracking-widest">
+              <div className="ml-auto px-4 py-1.5 rounded-full border border-white/20 text-xs text-white uppercase tracking-widest">
                 Optimizing Flow
               </div>
             </div>
@@ -116,24 +117,24 @@ const Home = () => {
       </AnimatePresence>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {[
-          { label: 'Total Feasts', val: stats.total, color: 'text-royal-gold' },
-          { label: 'In Preparation', val: stats.pending, color: 'text-amber-500' },
-          { label: 'Sautéing', val: stats.cooking, color: 'text-blue-500' },
-          { label: 'Ready for Service', val: stats.ready, color: 'text-emerald-500' },
+          { label: 'Total Feasts', val: stats.total, color: 'text-white' },
+          { label: 'In Preparation', val: stats.pending, color: 'text-white' },
+          { label: 'Sautéing', val: stats.cooking, color: 'text-white' },
+          { label: 'Ready for Service', val: stats.ready, color: 'text-white' },
         ].map((stat, i) => (
           <motion.div 
             key={i}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="royal-glass p-6 rounded-3xl group cursor-default"
+            className="royal-glass p-5 rounded-2xl group cursor-default border-white/15"
           >
-            <p className="text-[10px] uppercase tracking-widest text-gray-500 group-hover:text-royal-gold transition-colors">
+            <p className="text-[10px] uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">
               {stat.label}
             </p>
-            <h2 className={`text-3xl font-royal mt-2 ${stat.color}`}>
+            <h2 className={`text-3xl font-semibold mt-2 ${stat.color}`}>
               {stat.val}
             </h2>
           </motion.div>
