@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShoppingCart, Plus, Minus, X, CheckCircle2, Clock, Flame,
-  ChefHat, Trash2, UtensilsCrossed, Search, Star, TrendingUp
+  UtensilsCrossed, Search, MapPin
 } from 'lucide-react';
 import useRestaurantStore from '../store/useRestaurantStore';
 import useOrderStore from '../store/useOrderStore';
@@ -12,6 +12,12 @@ const TRACK_STEPS = [
   { key: 'pending', label: 'Order Placed', icon: Clock },
   { key: 'cooking', label: 'Being Prepared', icon: Flame },
   { key: 'ready', label: 'Ready to Serve', icon: CheckCircle2 },
+];
+
+const ORDER_MODES = [
+  { id: 'dine_in', label: 'Dine In' },
+  { id: 'take_away', label: 'Take Away' },
+  { id: 'delivery', label: 'Delivery' },
 ];
 
 const MenuCard = ({ item, onAdd }) => (
@@ -57,8 +63,8 @@ const MenuCard = ({ item, onAdd }) => (
 );
 
 const CustomerDashboard = () => {
-  const { menuItems, categories, getMenuByCategory } = useRestaurantStore();
-  const { addOrder, customerOrders } = useOrderStore();
+  const { categories, getMenuByCategory } = useRestaurantStore();
+  const { addOrder, getCustomerOrders } = useOrderStore();
   const { user } = useAuthStore();
 
   const [activeCategory, setActiveCategory] = useState('All');
@@ -67,6 +73,8 @@ const CustomerDashboard = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [tableNo, setTableNo] = useState('');
+  const [orderMode, setOrderMode] = useState('dine_in');
+  const [deliveryAddress, setDeliveryAddress] = useState('');
   const [showTracker, setShowTracker] = useState(false);
 
   const filteredItems = getMenuByCategory(activeCategory).filter(item =>
@@ -91,27 +99,35 @@ const CustomerDashboard = () => {
   const cartCount = cart.reduce((s, c) => s + c.qty, 0);
 
   const placeOrder = () => {
-    if (!tableNo || cart.length === 0) return;
+    if (cart.length === 0) return;
+    if (orderMode === 'dine_in' && !tableNo) return;
+    if (orderMode === 'delivery' && !deliveryAddress.trim()) return;
+
     const itemNames = cart.map(c => `${c.name}${c.qty > 1 ? ` x${c.qty}` : ''}`);
     addOrder({
       dish: cart[0].name + (cart.length > 1 ? ` +${cart.length - 1} more` : ''),
       chef: 'Chef Ahmed',
       chefId: 'chef@intellidine.com',
       type: cart[0].type || 'Classic',
-      tableNo: Number(tableNo),
+      tableNo: orderMode === 'dine_in' ? Number(tableNo) : null,
       customerName: user?.name || 'Guest',
+      customerEmail: user?.email || '',
+      serviceMode: orderMode,
+      deliveryAddress: orderMode === 'delivery' ? deliveryAddress.trim() : null,
       items: itemNames,
       totalAmount: cartTotal,
     });
     setOrderPlaced(true);
     setCart([]);
     setCartOpen(false);
+    if (orderMode === 'dine_in') setTableNo('');
+    if (orderMode === 'delivery') setDeliveryAddress('');
     setShowTracker(true);
     setTimeout(() => setOrderPlaced(false), 3000);
   };
 
-  // Use live order tracking from store
-  const myOrders = customerOrders;
+  // Always track from global orders for live status changes.
+  const myOrders = getCustomerOrders(user?.email);
   const latestOrder = myOrders[myOrders.length - 1];
 
   return (
@@ -141,7 +157,13 @@ const CustomerDashboard = () => {
                 <h3 className="font-royal text-white text-sm tracking-widest uppercase">Live Order Tracker</h3>
                 <button onClick={() => setShowTracker(false)} className="text-gray-600 hover:text-white transition-colors"><X size={16} /></button>
               </div>
-              <p className="text-xs text-gray-400 mb-4">Table #{latestOrder.tableNo} • {latestOrder.dish}</p>
+              <p className="text-xs text-gray-400 mb-4">
+                {latestOrder.serviceMode === 'delivery'
+                  ? 'Delivery'
+                  : latestOrder.serviceMode === 'take_away'
+                    ? 'Take Away'
+                    : `Table #${latestOrder.tableNo}`} • {latestOrder.dish}
+              </p>
               <div className="flex items-center gap-2">
                 {TRACK_STEPS.map((step, i) => {
                   const Icon = step.icon;
@@ -165,6 +187,26 @@ const CustomerDashboard = () => {
                     </React.Fragment>
                   );
                 })}
+              </div>
+
+              <div className="mt-4 space-y-2">
+                {[...myOrders].reverse().slice(0, 3).map(order => (
+                  <div key={order.id} className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 border border-white/10">
+                    <div className="min-w-0">
+                      <p className="text-xs text-gray-200 truncate">{order.dish}</p>
+                      <p className="text-[10px] text-gray-500 uppercase tracking-wider">
+                        {order.serviceMode === 'delivery'
+                          ? 'Delivery'
+                          : order.serviceMode === 'take_away'
+                            ? 'Take Away'
+                            : `Table ${order.tableNo}`}
+                      </p>
+                    </div>
+                    <span className="text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border border-white/20 text-white">
+                      {order.status}
+                    </span>
+                  </div>
+                ))}
               </div>
             </motion.div>
           )}
@@ -298,18 +340,56 @@ const CustomerDashboard = () => {
 
               <div className="p-5 border-t border-white/5 space-y-4">
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-gray-500 block mb-2">Table Number</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="12"
-                    value={tableNo}
-                    onChange={e => setTableNo(e.target.value)}
-                    placeholder="1 – 12"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 text-sm
-                      focus:outline-none focus:border-white/40 transition-all"
-                  />
+                  <label className="text-[10px] uppercase tracking-widest text-gray-500 block mb-2">Order Type</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {ORDER_MODES.map((mode) => (
+                      <button
+                        key={mode.id}
+                        onClick={() => setOrderMode(mode.id)}
+                        className={`px-2 py-2 rounded-lg border text-[10px] uppercase tracking-widest transition-all
+                          ${orderMode === mode.id
+                            ? 'border-white bg-white/14 text-white'
+                            : 'border-white/10 bg-white/5 text-gray-400 hover:text-white'}`}
+                      >
+                        {mode.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
+
+                {orderMode === 'dine_in' && (
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest text-gray-500 block mb-2">Table Number</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="12"
+                      value={tableNo}
+                      onChange={e => setTableNo(e.target.value)}
+                      placeholder="1 – 12"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 text-sm
+                        focus:outline-none focus:border-white/40 transition-all"
+                    />
+                  </div>
+                )}
+
+                {orderMode === 'delivery' && (
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest text-gray-500 block mb-2">Delivery Address</label>
+                    <div className="relative">
+                      <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                      <input
+                        type="text"
+                        value={deliveryAddress}
+                        onChange={e => setDeliveryAddress(e.target.value)}
+                        placeholder="Enter full address"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-gray-200 text-sm
+                          focus:outline-none focus:border-white/40 transition-all"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400 text-sm">Total</span>
                   <span className="font-royal text-white text-xl">₹{cartTotal}</span>
@@ -317,12 +397,16 @@ const CustomerDashboard = () => {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  disabled={cart.length === 0 || !tableNo}
+                  disabled={
+                    cart.length === 0 ||
+                    (orderMode === 'dine_in' && !tableNo) ||
+                    (orderMode === 'delivery' && !deliveryAddress.trim())
+                  }
                   onClick={placeOrder}
                   className="w-full py-4 rounded-xl bg-white text-black font-royal tracking-widest text-sm
                     shadow-gold-glow disabled:opacity-40 transition-all"
                 >
-                  Place Royal Order
+                  Place Order
                 </motion.button>
               </div>
             </motion.div>

@@ -55,7 +55,13 @@ const OrderCard = ({ order, onAdvance, chefMode }) => {
           <Table2 size={12} className="text-white/70" />
           <div>
             <p className="text-[9px] text-gray-600 uppercase">Table</p>
-            <p className="text-sm font-royal text-white">#{order.tableNo}</p>
+            <p className="text-sm font-royal text-white">
+              {order.serviceMode === 'delivery'
+                ? 'Delivery'
+                : order.serviceMode === 'take_away'
+                  ? 'Take Away'
+                  : `#${order.tableNo}`}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-1.5">
