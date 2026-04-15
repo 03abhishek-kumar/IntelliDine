@@ -1,59 +1,43 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Clock, User, ChevronRight, Zap } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChefHat, Flame, CheckCircle2, ChevronRight, Clock, Star, FlameKindling, Crown, Coffee } from 'lucide-react';
+
+const typeConfig = {
+  Signature: { icon: Crown, gradient: 'bg-gold-gradient text-royal-black shadow-gold-glow', glow: 'shadow-[0_0_20px_rgba(212,175,55,0.3)]' },
+  Premium: { icon: Star, gradient: 'bg-gradient-to-r from-gray-200 to-white text-royal-black', glow: 'shadow-[0_0_15px_rgba(255,255,255,0.2)]' },
+  Classic: { icon: FlameKindling, gradient: 'bg-white/10 text-white border border-white/20 hover:bg-white/20', glow: '' },
+  Dessert: { icon: Coffee, gradient: 'bg-gradient-to-r from-[#d4af37]/20 to-transparent text-[#d4af37] border border-[#d4af37]/30', glow: '' }
+};
 
 const RoyalCard = ({ order, onAdvance }) => {
-  const statusColors = {
-    pending: 'from-amber-500/20 to-transparent',
-    cooking: 'from-blue-500/20 to-transparent',
-    ready: 'from-emerald-500/20 to-transparent',
-  };
-
-  const statusIcons = {
-    pending: <Clock className="text-amber-400" size={16} />,
-    cooking: <Zap className="text-blue-400 animate-pulse" size={16} />,
-    ready: <ChevronRight className="text-emerald-400" size={16} />,
-  };
+  // Use first dish info for card layout simplification
+  const mainItem = order.items && order.items.length > 0 ? order.items[0].dishId : { name: 'Unknown', type: 'Classic', prepTime: 0 };
+  const TypeIcon = typeConfig[mainItem.type]?.icon || Star;
+  const typeStyle = typeConfig[mainItem.type]?.gradient || '';
+  const dateObj = new Date(order.createdAt || Date.now());
+  const timeString = `${dateObj.getHours()}:${dateObj.getMinutes().toString().padStart(2, '0')}`;
+  
+  // Format estimated time
+  const estDate = order.estimatedCompletionTime ? new Date(order.estimatedCompletionTime) : null;
+  const estString = estDate ? `${estDate.getHours()}:${estDate.getMinutes().toString().padStart(2, '0')}` : 'TBD';
 
   return (
     <motion.div
       layout
       initial={{ opacity: 0, scale: 0.9, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.9, x: 50 }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
-      className={`relative group overflow-hidden rounded-2xl royal-glass p-5 ${order.status === 'cooking' ? 'animate-glow' : ''}`}
+      exit={{ opacity: 0, scale: 0.9, x: order.status === 'ready' ? 100 : -100 }}
+      whileHover={{ y: -4, scale: 1.02 }}
+      className={`relative p-5 rounded-[1.5rem] bg-royal-black/60 border border-white/10 backdrop-blur-xl group transition-all duration-300 ${typeConfig[mainItem.type]?.glow || ''}`}
     >
-      {/* Background Gradient Accent */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${statusColors[order.status]} opacity-20 pointer-events-none`}></div>
-
-      <div className="relative z-10 space-y-4">
-        <div className="flex justify-between items-start">
-          <div>
-            <span className="text-[10px] uppercase tracking-widest text-royal-gold/60 font-medium">
-              {order.type} Order
-            </span>
-            <h3 className="text-lg font-royal gold-text-gradient leading-tight">
-              {order.dish}
-            </h3>
-          </div>
-          <div className="p-2 rounded-lg bg-royal-gold/5 border border-royal-gold/10">
-            {statusIcons[order.status]}
-          </div>
+      <div className="flex justify-between items-start mb-4">
+        <div className={`px-3 py-1.5 rounded-xl flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest ${typeStyle}`}>
+          <TypeIcon size={12} className={mainItem.type === 'Signature' ? 'animate-pulse' : ''} />
+          {mainItem.type}
         </div>
-
-        <div className="flex items-center gap-3 py-3 border-y border-white/5">
-          <div className="w-8 h-8 rounded-full bg-royal-gold/10 flex items-center justify-center border border-royal-gold/20">
-            <User size={14} className="text-royal-gold" />
-          </div>
-          <div>
-            <p className="text-[10px] text-gray-400 uppercase tracking-tighter">Assigned To</p>
-            <p className="text-sm font-medium text-gray-200">{order.chef}</p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between text-xs text-gray-500">
-          <div className="flex items-center gap-1.5">
+        
+        <div className="flex flex-col items-end">
+          <div className="flex items-center gap-1.5 text-xs text-gray-500 font-mono">
             <Clock size={12} />
             <span>{order.time}</span>
           </div>

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useOrderStore from '../store/useOrderStore';
 import RoyalCard from '../components/RoyalCard';
 import { ChefHat, Flame, CheckCircle2, AlertTriangle, ArrowDown } from 'lucide-react';
+import { io } from 'socket.io-client';
 
 const DashboardColumn = ({ title, icon: Icon, orders, onAdvance }) => (
   <div className="flex flex-col gap-6">
@@ -23,7 +24,7 @@ const DashboardColumn = ({ title, icon: Icon, orders, onAdvance }) => (
     <div className="flex flex-col gap-4 min-h-[500px] p-2 rounded-3xl bg-white/[0.02] border border-white/5">
       <AnimatePresence mode="popLayout">
         {orders.map((order) => (
-          <RoyalCard key={order.id} order={order} onAdvance={onAdvance} />
+          <RoyalCard key={order._id} order={order} onAdvance={onAdvance} />
         ))}
       </AnimatePresence>
       
@@ -38,8 +39,28 @@ const DashboardColumn = ({ title, icon: Icon, orders, onAdvance }) => (
 );
 
 const Home = () => {
-  const { orders, advanceStatus, alert } = useOrderStore();
+  const { orders, fetchOrders, advanceStatus, alert, injectOrder, injectDeletedOrder } = useOrderStore();
   const stats = useOrderStore.getState().getStats();
+
+  useEffect(() => {
+    fetchOrders(); // load initial
+
+    const socket = io('http://localhost:5000');
+    
+    socket.on('new_order', (order) => {
+       fetchOrders(); // Easiest way to maintain sorted Priority logic from Problem 2
+    });
+
+    socket.on('order_updated', (updatedOrder) => {
+       fetchOrders();
+    });
+
+    socket.on('order_deleted', (id) => {
+       injectDeletedOrder(id);
+    });
+
+    return () => socket.disconnect();
+  }, [fetchOrders, injectDeletedOrder]);
 
   const pendingOrders = orders.filter(o => o.status === 'pending');
   const cookingOrders = orders.filter(o => o.status === 'cooking');
@@ -48,79 +69,28 @@ const Home = () => {
   return (
     <div className="flex-1 overflow-y-auto p-6 space-y-12 pb-20">
       {/* Hero Section */}
-      <section className="relative h-[400px] w-full rounded-[2.5rem] overflow-hidden group shadow-2xl">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541544741938-0af808871cc0?q=80&w=2069&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-royal-black via-royal-black/40 to-transparent"></div>
-        
-        <div className="absolute bottom-12 left-12 space-y-4 max-w-2xl">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2"
-          >
-            <div className="h-1 w-12 bg-royal-gold"></div>
-            <span className="text-royal-gold font-medium tracking-[0.3em] uppercase text-xs">
-              Culinary Command Center
-            </span>
-          </motion.div>
+      <section className="relative h-[250px] w-full rounded-[2.5rem] overflow-hidden group shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-t from-royal-black via-royal-black/80 to-transparent"></div>
+        <div className="absolute bottom-8 left-12 space-y-2 max-w-2xl">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-6xl font-royal gold-text-gradient"
+            className="text-5xl font-royal gold-text-gradient"
           >
-            The Royal Legacy
+            Chef Station
           </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-gray-400 italic text-lg leading-relaxed font-playfair"
-          >
-            "From the afsaanvi lands of IntelliDine emerges a naayab dastoor, prepared for azeem-o-shaan gatherings. Crafted with royal precision, where every detail is treated with sabr and nazakat."
+          <motion.p className="text-gray-400 italic text-sm leading-relaxed font-playfair">
+            Real-time kitchen load optimization and smart queue prioritization active.
           </motion.p>
         </div>
-
-        <motion.div 
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-8 right-12 text-royal-gold cursor-pointer"
-        >
-          <ArrowDown size={32} />
-        </motion.div>
       </section>
-
-      {/* Alert System */}
-      <AnimatePresence>
-        {alert && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden"
-          >
-            <div className="flex items-center gap-4 p-4 royal-glass border-amber-500/50 rounded-2xl bg-amber-500/10">
-              <div className="p-2 bg-amber-500 rounded-lg">
-                <AlertTriangle size={20} className="text-royal-black" />
-              </div>
-              <div>
-                <h4 className="font-royal text-amber-500 tracking-wider">HIGH KITCHEN LOAD</h4>
-                <p className="text-sm text-amber-500/80">{alert}</p>
-              </div>
-              <div className="ml-auto px-4 py-1.5 rounded-full border border-amber-500/30 text-xs text-amber-500 uppercase tracking-widest">
-                Optimizing Flow
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Total Feasts', val: stats.total, color: 'text-royal-gold' },
-          { label: 'In Preparation', val: stats.pending, color: 'text-amber-500' },
-          { label: 'Sautéing', val: stats.cooking, color: 'text-blue-500' },
+          { label: 'Total Queue', val: stats.total, color: 'text-royal-gold' },
+          { label: 'Pending Prioritization', val: stats.pending, color: 'text-amber-500' },
+          { label: 'In Kitchen', val: stats.cooking, color: 'text-blue-500' },
           { label: 'Ready for Service', val: stats.ready, color: 'text-emerald-500' },
         ].map((stat, i) => (
           <motion.div 
@@ -143,19 +113,19 @@ const Home = () => {
       {/* Dashboard Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <DashboardColumn 
-          title="Grand Preparation" 
+          title="Smart Queue (Pending)" 
           icon={ChefHat} 
           orders={pendingOrders} 
           onAdvance={advanceStatus}
         />
         <DashboardColumn 
-          title="Active Culinary" 
+          title="Cooking Pipeline" 
           icon={Flame} 
           orders={cookingOrders} 
           onAdvance={advanceStatus}
         />
         <DashboardColumn 
-          title="Ready to Serve" 
+          title="Service Queue" 
           icon={CheckCircle2} 
           orders={readyOrders} 
           onAdvance={advanceStatus}
