@@ -1,6 +1,13 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Clock, User, ChevronRight, Zap } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChefHat, Flame, CheckCircle2, ChevronRight, Clock, Star, FlameKindling, Crown, Coffee } from 'lucide-react';
+
+const typeConfig = {
+  Signature: { icon: Crown, gradient: 'bg-gold-gradient text-royal-black shadow-gold-glow', glow: 'shadow-[0_0_20px_rgba(212,175,55,0.3)]' },
+  Premium: { icon: Star, gradient: 'bg-gradient-to-r from-gray-200 to-white text-royal-black', glow: 'shadow-[0_0_15px_rgba(255,255,255,0.2)]' },
+  Classic: { icon: FlameKindling, gradient: 'bg-white/10 text-white border border-white/20 hover:bg-white/20', glow: '' },
+  Dessert: { icon: Coffee, gradient: 'bg-gradient-to-r from-[#d4af37]/20 to-transparent text-[#d4af37] border border-[#d4af37]/30', glow: '' }
+};
 
 const RoyalCard = ({ order, onAdvance }) => {
   const statusColors = {
@@ -20,9 +27,9 @@ const RoyalCard = ({ order, onAdvance }) => {
       layout
       initial={{ opacity: 0, scale: 0.9, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.9, x: 50 }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
-      className={`relative group overflow-hidden rounded-2xl royal-glass p-5 ${order.status === 'cooking' ? 'animate-glow' : ''}`}
+      exit={{ opacity: 0, scale: 0.9, x: order.status === 'ready' ? 100 : -100 }}
+      whileHover={{ y: -4, scale: 1.02 }}
+      className={`relative p-5 rounded-[1.5rem] bg-royal-black/60 border border-white/10 backdrop-blur-xl group transition-all duration-300 ${typeConfig[mainItem.type]?.glow || ''}`}
     >
       {/* Background Gradient Accent */}
       <div className={`absolute inset-0 ${statusColors[order.status]} opacity-40 pointer-events-none`}></div>

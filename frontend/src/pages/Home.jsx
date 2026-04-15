@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useOrderStore from '../store/useOrderStore';
 import RoyalCard from '../components/RoyalCard';
 import { ChefHat, Flame, CheckCircle2, AlertTriangle, ArrowDown } from 'lucide-react';
+import { io } from 'socket.io-client';
 
 const DashboardColumn = ({ title, icon: Icon, orders, onAdvance }) => (
   <div className="flex flex-col gap-6">
@@ -23,7 +24,7 @@ const DashboardColumn = ({ title, icon: Icon, orders, onAdvance }) => (
     <div className="flex flex-col gap-4 p-2 rounded-2xl bg-white/[0.03] border border-white/10">
       <AnimatePresence mode="popLayout">
         {orders.map((order) => (
-          <RoyalCard key={order.id} order={order} onAdvance={onAdvance} />
+          <RoyalCard key={order._id} order={order} onAdvance={onAdvance} />
         ))}
       </AnimatePresence>
       
@@ -38,8 +39,28 @@ const DashboardColumn = ({ title, icon: Icon, orders, onAdvance }) => (
 );
 
 const Home = () => {
-  const { orders, advanceStatus, alert } = useOrderStore();
+  const { orders, fetchOrders, advanceStatus, alert, injectOrder, injectDeletedOrder } = useOrderStore();
   const stats = useOrderStore.getState().getStats();
+
+  useEffect(() => {
+    fetchOrders(); // load initial
+
+    const socket = io('http://localhost:5000');
+    
+    socket.on('new_order', (order) => {
+       fetchOrders(); // Easiest way to maintain sorted Priority logic from Problem 2
+    });
+
+    socket.on('order_updated', (updatedOrder) => {
+       fetchOrders();
+    });
+
+    socket.on('order_deleted', (id) => {
+       injectDeletedOrder(id);
+    });
+
+    return () => socket.disconnect();
+  }, [fetchOrders, injectDeletedOrder]);
 
   const pendingOrders = orders.filter(o => o.status === 'pending');
   const cookingOrders = orders.filter(o => o.status === 'cooking');
@@ -144,19 +165,19 @@ const Home = () => {
       {/* Dashboard Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <DashboardColumn 
-          title="Grand Preparation" 
+          title="Smart Queue (Pending)" 
           icon={ChefHat} 
           orders={pendingOrders} 
           onAdvance={advanceStatus}
         />
         <DashboardColumn 
-          title="Active Culinary" 
+          title="Cooking Pipeline" 
           icon={Flame} 
           orders={cookingOrders} 
           onAdvance={advanceStatus}
         />
         <DashboardColumn 
-          title="Ready to Serve" 
+          title="Service Queue" 
           icon={CheckCircle2} 
           orders={readyOrders} 
           onAdvance={advanceStatus}

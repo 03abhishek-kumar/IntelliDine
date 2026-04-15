@@ -34,6 +34,8 @@ const RootRedirect = () => {
 };
 
 function App() {
+  const { user } = useAuthStore();
+
   return (
     <BrowserRouter>
       <Routes>

@@ -1,45 +1,67 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const connectDB = require('./config/db');
-const Order = require('./models/Order');
+const User = require('./models/User');
 const Ingredient = require('./models/Ingredient');
+const Dish = require('./models/Dish');
+const Order = require('./models/Order');
 
-const sampleOrders = [
-  { items: ['Subz-e-Biryani', 'Raita'], prepTime: 18, priority: 'high', status: 'pending' },
-  { items: ['Murgh-e-Khaas', 'Naan'], prepTime: 24, priority: 'high', status: 'cooking' },
-  { items: ['Zaikedaar Paneer', 'Jeera Rice'], prepTime: 16, priority: 'medium', status: 'pending' },
-  { items: ['Dum Gosht', 'Rumali Roti'], prepTime: 28, priority: 'medium', status: 'done' },
-  { items: ['Noorani Kheer'], prepTime: 10, priority: 'low', status: 'pending' },
-];
-
-const sampleIngredients = [
-  { name: 'Basmati Rice', quantity: 12000, unit: 'grams', threshold: 3000 },
-  { name: 'Chicken', quantity: 45, unit: 'pieces', threshold: 12 },
-  { name: 'Paneer', quantity: 6000, unit: 'grams', threshold: 1500 },
-  { name: 'Cooking Oil', quantity: 20, unit: 'liters', threshold: 6 },
-  { name: 'Tomatoes', quantity: 9000, unit: 'grams', threshold: 2000 },
-  { name: 'Onions', quantity: 14000, unit: 'grams', threshold: 3500 },
-  { name: 'Cream', quantity: 8, unit: 'liters', threshold: 2 },
-  { name: 'Saffron', quantity: 350, unit: 'grams', threshold: 100 },
-];
-
-const seed = async () => {
+const seedData = async () => {
   try {
     await connectDB();
 
-    await Order.deleteMany({});
-    await Ingredient.deleteMany({});
+    console.log('Clearing existing data...');
+    await User.deleteMany();
+    await Order.deleteMany();
+    await Dish.deleteMany();
+    await Ingredient.deleteMany();
 
-    await Order.insertMany(sampleOrders);
-    await Ingredient.insertMany(sampleIngredients);
+    console.log('Seeding Users...');
+    for (const u of [
+      { name: 'Customer One', email: 'customer@intellidine.com', role: 'customer', password: 'password' },
+      { name: 'Head Chef', email: 'chef@intellidine.com', role: 'chef', password: 'password' },
+      { name: 'Front Desk', email: 'reception@intellidine.com', role: 'reception', password: 'password' }
+    ]) {
+      await User.create(u);
+    }
 
-    console.log('Seeding completed successfully');
-  } catch (error) {
-    console.error('Seeding failed:', error.message);
-  } finally {
-    await mongoose.connection.close();
+    console.log('Seeding Ingredients...');
+    const ingredients = await Ingredient.insertMany([
+      { name: 'Basmati Rice', quantity: 5000, unit: 'grams', threshold: 1000 },
+      { name: 'Chicken', quantity: 2000, unit: 'grams', threshold: 800 },
+      { name: 'Paneer', quantity: 1500, unit: 'grams', threshold: 500 },
+      { name: 'Spices', quantity: 500, unit: 'grams', threshold: 100 },
+      { name: 'Milk', quantity: 5, unit: 'liters', threshold: 2 }
+    ]);
+
+    const getIngId = (name) => ingredients.find(i => i.name === name)._id;
+
+    console.log('Seeding Dishes...');
+    await Dish.insertMany([
+      {
+        name: 'Subz-e-Biryani', type: 'Signature', prepTime: 20, price: 15,
+        ingredients: [{ ingredientId: getIngId('Basmati Rice'), quantity: 200 }, { ingredientId: getIngId('Spices'), quantity: 10 }]
+      },
+      {
+        name: 'Murgh-e-Khaas', type: 'Premium', prepTime: 25, price: 22,
+        ingredients: [{ ingredientId: getIngId('Chicken'), quantity: 300 }, { ingredientId: getIngId('Spices'), quantity: 15 }]
+      },
+      {
+        name: 'Zaikedaar Paneer', type: 'Classic', prepTime: 15, price: 18,
+        ingredients: [{ ingredientId: getIngId('Paneer'), quantity: 200 }, { ingredientId: getIngId('Spices'), quantity: 10 }]
+      },
+      {
+        name: 'Noorani Kheer', type: 'Dessert', prepTime: 10, price: 8,
+        ingredients: [{ ingredientId: getIngId('Milk'), quantity: 0.5 }, { ingredientId: getIngId('Basmati Rice'), quantity: 50 }]
+      }
+    ]);
+
+    console.log('Database seeded successfully!');
     process.exit();
+  } catch (error) {
+    console.error('Error seeding data:', error);
+    process.exit(1);
   }
 };
 
-seed();
+seedData();
