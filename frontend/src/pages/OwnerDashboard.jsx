@@ -252,7 +252,11 @@ const OwnerDashboard = () => {
                   className="grid grid-cols-6 items-center px-5 py-4 hover:bg-white/[0.02] transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">{item.emoji}</span>
+                    {item.image ? (
+                      <img src={item.image} alt={item.name} className="w-8 h-8 rounded object-cover" />
+                    ) : (
+                      <span className="text-lg">{item.emoji}</span>
+                    )}
                     <span className="text-sm text-gray-200 font-medium truncate">{item.name}</span>
                   </div>
                   <span className="text-xs text-gray-400">{item.category}</span>

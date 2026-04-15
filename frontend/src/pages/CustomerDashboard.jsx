@@ -19,8 +19,12 @@ const MenuCard = ({ item, onAdd }) => (
     whileHover={{ y: -5 }}
     className="royal-glass rounded-2xl overflow-hidden group cursor-default"
   >
-    <div className="relative h-32 bg-white/6 flex items-center justify-center">
-      <span className="text-5xl">{item.emoji}</span>
+    <div className="relative h-48 bg-white/6 flex items-center justify-center">
+      {item.image ? (
+        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+      ) : (
+        <span className="text-5xl">{item.emoji}</span>
+      )}
       {!item.available && (
         <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
           <span className="text-xs text-gray-400 uppercase tracking-widest">Unavailable</span>
@@ -270,7 +274,11 @@ const CustomerDashboard = () => {
                 )}
                 {cart.map(item => (
                   <div key={item.id} className="flex items-center gap-4 p-3 rounded-xl bg-white/[0.03] border border-white/5">
-                    <span className="text-2xl">{item.emoji}</span>
+                    {item.image ? (
+                      <img src={item.image} alt={item.name} className="w-10 h-10 rounded shadow object-cover" />
+                    ) : (
+                      <span className="text-2xl">{item.emoji}</span>
+                    )}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-gray-200 font-medium truncate">{item.name}</p>
                       <p className="text-xs text-white">₹{item.price * item.qty}</p>
