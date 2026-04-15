@@ -3,45 +3,98 @@
 @config "../tailwind.config.js";
 
 @layer base {
+  :root {
+    color-scheme: dark;
+  }
+
   body {
-    @apply bg-royal-black text-gray-200 font-inter antialiased;
-    background-image: 
-      radial-gradient(circle at 20% 30%, rgba(207, 167, 86, 0.05) 0%, transparent 40%),
-      radial-gradient(circle at 80% 70%, rgba(207, 167, 86, 0.05) 0%, transparent 40%);
+    @apply text-gray-200 font-inter antialiased;
+    background: #050505;
     min-height: 100vh;
+    background-attachment: fixed;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.22;
+    background-image:
+      radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03), transparent 40%);
+    background-size: 3px 3px, 100% 100%;
+    mix-blend-mode: soft-light;
+    z-index: 0;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-royal text-royal-gold tracking-wider;
+    @apply font-royal text-white tracking-wider;
+  }
+
+  ::selection {
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
   }
 }
 
 @layer components {
   .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+    @apply bg-white/[0.06] backdrop-blur-xl border border-white/15;
   }
 
   .royal-glass {
-    @apply bg-royal-black/60 backdrop-blur-2xl border border-royal-gold/20 shadow-gold-glow;
+    @apply backdrop-blur-2xl border border-white/15;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow:
+      0 14px 44px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+      0 0 24px rgba(255, 255, 255, 0.05);
   }
 
   .gold-text-gradient {
-    @apply bg-gold-gradient bg-clip-text text-transparent opacity-90;
+    @apply text-white opacity-95;
   }
 
   .gold-border-gradient {
-    border: 1px solid;
-    border-image: linear-gradient(to right, #cfa756, #8b6e2f) 1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 }
 
 /* Custom Animations */
 @keyframes glow-pulse {
-  0% { box-shadow: 0 0 5px rgba(207, 167, 86, 0.2); }
-  50% { box-shadow: 0 0 20px rgba(207, 167, 86, 0.5); }
-  100% { box-shadow: 0 0 5px rgba(207, 167, 86, 0.2); }
+  0% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.15); }
+  50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.28); }
+  100% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.15); }
 }
 
 .animate-glow {
   animation: glow-pulse 3s infinite ease-in-out;
+}
+
+.glass-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid transparent;
+  background: linear-gradient(
+      130deg,
+      rgba(255, 255, 255, 0.34),
+      rgba(255, 255, 255, 0.08) 35%,
+      rgba(255, 255, 255, 0.03)
+    )
+    border-box;
+  -webkit-mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }

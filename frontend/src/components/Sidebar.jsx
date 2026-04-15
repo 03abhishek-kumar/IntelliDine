@@ -26,20 +26,20 @@ const ROLE_NAV = {
 };
 
 const ROLE_META = {
-  customer:  { label: 'Guest Portal',      icon: UtensilsCrossed, color: 'text-emerald-400', shift: 'Dining Experience' },
-  owner:     { label: 'Owner Console',     icon: Crown,           color: 'text-royal-gold',  shift: 'Management View' },
-  chef:      { label: 'Chef Station',      icon: ChefHat,         color: 'text-blue-400',    shift: 'Kitchen Active' },
-  reception: { label: 'Reception Desk',   icon: MonitorDot,      color: 'text-purple-400',  shift: 'Front of House' },
+  customer:  { label: 'Guest Portal',      icon: UtensilsCrossed, color: 'text-white', shift: 'Dining Experience' },
+  owner:     { label: 'Owner Console',     icon: Crown,           color: 'text-white', shift: 'Management View' },
+  chef:      { label: 'Chef Station',      icon: ChefHat,         color: 'text-white', shift: 'Kitchen Active' },
+  reception: { label: 'Reception Desk',    icon: MonitorDot,      color: 'text-white', shift: 'Front of House' },
 };
 
 const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
   <motion.div
-    whileHover={{ x: 4, backgroundColor: 'rgba(207,167,86,0.05)' }}
+    whileHover={{ x: 4, backgroundColor: 'rgba(255,255,255,0.08)' }}
     onClick={onClick}
-    className={`flex items-center gap-4 px-4 py-3 rounded-xl cursor-pointer transition-all
+    className={`flex items-center gap-4 px-4 py-3 rounded-xl cursor-pointer transition-all backdrop-blur-md
       ${active
-        ? 'bg-royal-gold/10 text-royal-gold border-l-4 border-royal-gold'
-        : 'text-gray-400 hover:text-royal-gold border-l-4 border-transparent'}`}
+        ? 'bg-white/12 text-white border-l-4 border-white shadow-[0_8px_20px_rgba(255,255,255,0.12)]'
+        : 'text-gray-300 hover:text-white border-l-4 border-transparent'}`}
   >
     <Icon size={18} />
     <span className="text-sm font-medium tracking-wide">{label}</span>
@@ -60,11 +60,11 @@ const Sidebar = () => {
   const handleLogout = () => { logout(); navigate('/'); };
 
   return (
-    <aside className="hidden md:flex flex-col w-64 h-[calc(100vh-73px)] border-r border-royal-gold/10 bg-royal-black/40 backdrop-blur-md p-4 shrink-0">
+    <aside className="hidden md:flex flex-col w-64 h-[calc(100vh-88px)] royal-glass glass-border rounded-2xl ml-4 mb-4 p-4 shrink-0">
       {/* Role badge */}
-      <div className="flex items-center gap-3 px-4 py-3 mb-3 rounded-xl bg-white/[0.03] border border-white/5">
-        <div className="w-9 h-9 rounded-full bg-gold-gradient flex items-center justify-center shadow-gold-glow shrink-0">
-          <span className="font-royal text-royal-black text-sm font-bold">{user?.name?.[0]}</span>
+      <div className="flex items-center gap-3 px-4 py-3 mb-3 rounded-xl bg-white/[0.07] border border-white/10">
+        <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-gold-glow shrink-0">
+          <span className="font-royal text-black text-sm font-bold">{user?.name?.[0]}</span>
         </div>
         <div className="min-w-0">
           <p className="text-sm text-gray-200 font-medium truncate">{user?.name}</p>
@@ -89,18 +89,18 @@ const Sidebar = () => {
       </div>
 
       {/* Bottom: shift info + logout */}
-      <div className="pt-4 border-t border-white/5 space-y-2">
+      <div className="pt-4 border-t border-white/10 space-y-2">
         <SidebarItem icon={LogOut} label="Sign Out" onClick={handleLogout} />
 
-        <div className="mt-4 p-4 rounded-2xl bg-gradient-to-br from-royal-gold/10 to-transparent border border-royal-gold/10">
-          <p className="text-[10px] text-royal-gold/60 uppercase tracking-widest mb-1">Current Shift</p>
-          <p className="text-sm font-royal text-royal-gold">{meta.shift}</p>
+        <div className="mt-4 p-4 rounded-2xl bg-white/6 border border-white/20">
+          <p className="text-[10px] text-white/60 uppercase tracking-widest mb-1">Current Shift</p>
+          <p className="text-sm font-royal text-white">{meta.shift}</p>
           <div className="mt-3 w-full bg-white/5 h-1 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: '68%' }}
               transition={{ duration: 1, delay: 0.3 }}
-              className="h-full bg-royal-gold shadow-gold-glow"
+              className="h-full bg-white shadow-gold-glow"
             />
           </div>
         </div>

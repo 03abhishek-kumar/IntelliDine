@@ -19,14 +19,14 @@ const MenuCard = ({ item, onAdd }) => (
     whileHover={{ y: -5 }}
     className="royal-glass rounded-2xl overflow-hidden group cursor-default"
   >
-    <div className="relative h-32 bg-gradient-to-br from-royal-gold/10 via-white/5 to-transparent flex items-center justify-center">
+    <div className="relative h-32 bg-white/6 flex items-center justify-center">
       <span className="text-5xl">{item.emoji}</span>
       {!item.available && (
         <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
           <span className="text-xs text-gray-400 uppercase tracking-widest">Unavailable</span>
         </div>
       )}
-      <span className="absolute top-3 right-3 text-[10px] bg-royal-gold/20 border border-royal-gold/30 text-royal-gold px-2 py-0.5 rounded-full uppercase tracking-wider">
+      <span className="absolute top-3 right-3 text-[10px] bg-white/12 border border-white/20 text-white px-2 py-0.5 rounded-full uppercase tracking-wider">
         {item.type}
       </span>
     </div>
@@ -36,16 +36,16 @@ const MenuCard = ({ item, onAdd }) => (
         <p className="text-[11px] text-gray-500 mt-1 leading-relaxed line-clamp-2">{item.description}</p>
       </div>
       <div className="flex items-center justify-between">
-        <span className="text-royal-gold font-royal text-base">₹{item.price}</span>
+        <span className="text-white font-royal text-base">₹{item.price}</span>
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           disabled={!item.available}
           onClick={() => onAdd(item)}
-          className="w-8 h-8 rounded-full bg-gold-gradient flex items-center justify-center shadow-gold-glow
+          className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-gold-glow
             disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-gold-glow-strong transition-all"
         >
-          <Plus size={16} className="text-royal-black" />
+          <Plus size={16} className="text-black" />
         </motion.button>
       </div>
     </div>
@@ -115,9 +115,9 @@ const CustomerDashboard = () => {
       {/* Hero */}
       <div className="relative h-52 overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070')] bg-cover bg-center" />
-        <div className="absolute inset-0 bg-gradient-to-r from-royal-black via-royal-black/70 to-transparent" />
+        <div className="absolute inset-0 bg-black/70" />
         <div className="relative p-8 h-full flex flex-col justify-end">
-          <p className="text-royal-gold/70 text-xs tracking-widest uppercase mb-1">Welcome, {user?.name}</p>
+          <p className="text-white/70 text-xs tracking-widest uppercase mb-1">Welcome, {user?.name}</p>
           <h1 className="font-royal text-4xl gold-text-gradient">Royal Feasts Await</h1>
           <p className="text-gray-400 text-sm mt-1">Explore our curated menu of heritage recipes</p>
         </div>
@@ -131,10 +131,10 @@ const CustomerDashboard = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="royal-glass rounded-2xl p-5 border border-royal-gold/20 overflow-hidden"
+              className="royal-glass rounded-2xl p-5 border border-white/20 overflow-hidden"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-royal text-royal-gold text-sm tracking-widest uppercase">Live Order Tracker</h3>
+                <h3 className="font-royal text-white text-sm tracking-widest uppercase">Live Order Tracker</h3>
                 <button onClick={() => setShowTracker(false)} className="text-gray-600 hover:text-white transition-colors"><X size={16} /></button>
               </div>
               <p className="text-xs text-gray-400 mb-4">Table #{latestOrder.tableNo} • {latestOrder.dish}</p>
@@ -148,15 +148,15 @@ const CustomerDashboard = () => {
                     <React.Fragment key={step.key}>
                       <div className="flex flex-col items-center gap-1.5 flex-1">
                         <div className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all
-                          ${active ? 'border-royal-gold bg-royal-gold/20 shadow-gold-glow' : done ? 'border-royal-gold/40 bg-royal-gold/10' : 'border-white/10 bg-white/5'}`}>
-                          <Icon size={16} className={done ? 'text-royal-gold' : 'text-gray-600'} />
+                          ${active ? 'border-white bg-white/18 shadow-gold-glow' : done ? 'border-white/45 bg-white/10' : 'border-white/10 bg-white/5'}`}>
+                          <Icon size={16} className={done ? 'text-white' : 'text-gray-600'} />
                         </div>
-                        <span className={`text-[9px] uppercase tracking-wider text-center ${done ? 'text-royal-gold' : 'text-gray-600'}`}>
+                        <span className={`text-[9px] uppercase tracking-wider text-center ${done ? 'text-white' : 'text-gray-600'}`}>
                           {step.label}
                         </span>
                       </div>
                       {i < TRACK_STEPS.length - 1 && (
-                        <div className={`flex-1 h-px mb-5 transition-all ${done && i < stepIndex ? 'bg-royal-gold/40' : 'bg-white/10'}`} />
+                        <div className={`flex-1 h-px mb-5 transition-all ${done && i < stepIndex ? 'bg-white/40' : 'bg-white/10'}`} />
                       )}
                     </React.Fragment>
                   );
@@ -173,10 +173,10 @@ const CustomerDashboard = () => {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="flex items-center gap-3 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30"
+              className="flex items-center gap-3 p-4 rounded-2xl bg-white/8 border border-white/20"
             >
-              <CheckCircle2 size={18} className="text-emerald-400" />
-              <span className="text-sm text-emerald-300">Order placed! Your feast is being prepared.</span>
+              <CheckCircle2 size={18} className="text-white" />
+              <span className="text-sm text-gray-100">Order placed! Your feast is being prepared.</span>
             </motion.div>
           )}
         </AnimatePresence>
@@ -189,7 +189,7 @@ const CustomerDashboard = () => {
             onChange={e => setSearch(e.target.value)}
             placeholder="Search dishes..."
             className="w-full bg-white/5 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-gray-200 text-sm
-              focus:outline-none focus:border-royal-gold/50 transition-all placeholder-gray-600"
+              focus:outline-none focus:border-white/40 transition-all placeholder-gray-600"
           />
         </div>
 
@@ -201,8 +201,8 @@ const CustomerDashboard = () => {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-2 rounded-full text-xs uppercase tracking-widest font-medium whitespace-nowrap transition-all border
                 ${activeCategory === cat
-                  ? 'border-royal-gold bg-royal-gold/10 text-royal-gold shadow-gold-glow'
-                  : 'border-white/10 text-gray-500 hover:text-royal-gold hover:border-royal-gold/30'}`}
+                  ? 'border-white bg-white/10 text-white shadow-gold-glow'
+                  : 'border-white/10 text-gray-500 hover:text-white hover:border-white/40'}`}
             >
               {cat}
             </button>
@@ -232,7 +232,7 @@ const CustomerDashboard = () => {
             exit={{ y: 100, opacity: 0 }}
             onClick={() => setCartOpen(true)}
             className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 px-8 py-4 rounded-full
-              bg-gold-gradient text-royal-black font-royal tracking-widest text-sm shadow-gold-glow-strong z-40"
+              bg-white text-black font-royal tracking-widest text-sm shadow-gold-glow-strong z-40"
           >
             <ShoppingCart size={18} />
             View Cart ({cartCount} items · ₹{cartTotal})
@@ -252,10 +252,10 @@ const CustomerDashboard = () => {
             <motion.div
               initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25 }}
-              className="fixed right-0 top-0 h-full w-full max-w-sm royal-glass border-l border-royal-gold/20 z-50 flex flex-col"
+              className="fixed right-0 top-0 h-full w-full max-w-sm royal-glass border-l border-white/20 z-50 flex flex-col"
             >
               <div className="p-5 border-b border-white/5 flex items-center justify-between">
-                <h2 className="font-royal text-royal-gold text-xl tracking-wider">Your Cart</h2>
+                <h2 className="font-royal text-white text-xl tracking-wider">Your Cart</h2>
                 <button onClick={() => setCartOpen(false)} className="text-gray-500 hover:text-white transition-colors">
                   <X size={20} />
                 </button>
@@ -273,7 +273,7 @@ const CustomerDashboard = () => {
                     <span className="text-2xl">{item.emoji}</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-gray-200 font-medium truncate">{item.name}</p>
-                      <p className="text-xs text-royal-gold">₹{item.price * item.qty}</p>
+                      <p className="text-xs text-white">₹{item.price * item.qty}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <button onClick={() => updateQty(item.id, -1)} className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
@@ -299,19 +299,19 @@ const CustomerDashboard = () => {
                     onChange={e => setTableNo(e.target.value)}
                     placeholder="1 – 12"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 text-sm
-                      focus:outline-none focus:border-royal-gold/50 transition-all"
+                      focus:outline-none focus:border-white/40 transition-all"
                   />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400 text-sm">Total</span>
-                  <span className="font-royal text-royal-gold text-xl">₹{cartTotal}</span>
+                  <span className="font-royal text-white text-xl">₹{cartTotal}</span>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   disabled={cart.length === 0 || !tableNo}
                   onClick={placeOrder}
-                  className="w-full py-4 rounded-xl bg-gold-gradient text-royal-black font-royal tracking-widest text-sm
+                  className="w-full py-4 rounded-xl bg-white text-black font-royal tracking-widest text-sm
                     shadow-gold-glow disabled:opacity-40 transition-all"
                 >
                   Place Royal Order

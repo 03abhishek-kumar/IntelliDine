@@ -5,9 +5,9 @@ import useOrderStore from '../store/useOrderStore';
 import useAuthStore from '../store/useAuthStore';
 
 const STATUS_CONFIG = {
-  pending:  { label: 'Awaiting Prep',   color: 'text-amber-400',   bg: 'from-amber-500/15 to-transparent',  border: 'border-amber-500/20',  icon: Clock },
-  cooking:  { label: 'In Progress',     color: 'text-blue-400',    bg: 'from-blue-500/15 to-transparent',   border: 'border-blue-500/20',   icon: Flame },
-  ready:    { label: 'Ready to Serve',  color: 'text-emerald-400', bg: 'from-emerald-500/15 to-transparent',border: 'border-emerald-500/20', icon: CheckCircle2 },
+  pending:  { label: 'Awaiting Prep',   color: 'text-white', bg: 'bg-white/6', border: 'border-white/20', icon: Clock },
+  cooking:  { label: 'In Progress',     color: 'text-white', bg: 'bg-white/8', border: 'border-white/20', icon: Flame },
+  ready:    { label: 'Ready to Serve',  color: 'text-white', bg: 'bg-white/6', border: 'border-white/20', icon: CheckCircle2 },
 };
 
 const OrderCard = ({ order, onAdvance, chefMode }) => {
@@ -24,7 +24,7 @@ const OrderCard = ({ order, onAdvance, chefMode }) => {
       whileHover={{ y: -4 }}
       className={`relative overflow-hidden rounded-2xl royal-glass p-5 space-y-4 ${order.status === 'cooking' ? 'animate-glow' : ''}`}
     >
-      <div className={`absolute inset-0 bg-gradient-to-br ${cfg.bg} pointer-events-none`} />
+      <div className={`absolute inset-0 ${cfg.bg} pointer-events-none`} />
 
       <div className="relative z-10 flex justify-between items-start">
         <div>
@@ -43,7 +43,7 @@ const OrderCard = ({ order, onAdvance, chefMode }) => {
           <p className="text-[9px] uppercase tracking-widest text-gray-600 mb-2">Items</p>
           {order.items.map((item, i) => (
             <div key={i} className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-royal-gold/40" />
+              <div className="w-1.5 h-1.5 rounded-full bg-white/60" />
               <span className="text-xs text-gray-300">{item}</span>
             </div>
           ))}
@@ -52,10 +52,10 @@ const OrderCard = ({ order, onAdvance, chefMode }) => {
 
       <div className="relative z-10 grid grid-cols-3 gap-2">
         <div className="flex items-center gap-1.5">
-          <Table2 size={12} className="text-royal-gold/60" />
+          <Table2 size={12} className="text-white/70" />
           <div>
             <p className="text-[9px] text-gray-600 uppercase">Table</p>
-            <p className="text-sm font-royal text-royal-gold">#{order.tableNo}</p>
+            <p className="text-sm font-royal text-white">#{order.tableNo}</p>
           </div>
         </div>
         <div className="flex items-center gap-1.5">
@@ -76,7 +76,7 @@ const OrderCard = ({ order, onAdvance, chefMode }) => {
 
       <div className="relative z-10 flex items-center justify-between pt-2 border-t border-white/5">
         <div className="flex items-center gap-1.5">
-          <User size={12} className="text-royal-gold/50" />
+          <User size={12} className="text-white/70" />
           <span className="text-xs text-gray-400">{order.chef}</span>
         </div>
         <motion.button
@@ -86,8 +86,8 @@ const OrderCard = ({ order, onAdvance, chefMode }) => {
           disabled={order.status === 'ready'}
           className={`flex items-center gap-1 text-[10px] font-medium uppercase tracking-widest transition-colors
             ${order.status === 'ready'
-              ? 'text-emerald-400 cursor-default'
-              : 'text-royal-gold hover:text-white cursor-pointer'}`}
+              ? 'text-white cursor-default'
+              : 'text-white/85 hover:text-white cursor-pointer'}`}
         >
           {order.status === 'ready' ? 'Serve Now' : 'Advance'} <Zap size={12} />
         </motion.button>
@@ -103,20 +103,20 @@ const KanbanColumn = ({ title, icon: Icon, orders, status, onAdvance, color }) =
         <div className={`p-2 rounded-lg ${color.iconBg}`}>
           <Icon className={color.icon} size={18} />
         </div>
-        <h2 className="text-sm font-royal tracking-widest uppercase text-royal-gold/80">{title}</h2>
+        <h2 className="text-sm font-royal tracking-widest uppercase text-white/85">{title}</h2>
       </div>
       <span className={`text-xs font-bold ${color.badge} bg-white/5 px-2.5 py-1 rounded-full font-mono`}>
         {orders.length}
       </span>
     </div>
-    <div className="flex flex-col gap-4 min-h-[400px] p-3 rounded-3xl bg-white/[0.02] border border-white/5">
+    <div className="flex flex-col gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/10">
       <AnimatePresence mode="popLayout">
         {orders.map(order => (
           <OrderCard key={order.id} order={order} onAdvance={onAdvance} chefMode />
         ))}
       </AnimatePresence>
       {orders.length === 0 && (
-        <div className="flex-1 flex flex-col items-center justify-center text-gray-700 border-2 border-dashed border-white/5 rounded-2xl min-h-[200px]">
+        <div className="h-36 flex flex-col items-center justify-center text-gray-700 border border-dashed border-white/10 rounded-2xl">
           <Package size={32} className="mb-2 opacity-20" />
           <p className="text-xs uppercase tracking-widest">Station Clear</p>
         </div>
@@ -146,7 +146,7 @@ const ChefDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[10px] uppercase tracking-widest text-royal-gold/60 mb-1">Chef Station</p>
+          <p className="text-[10px] uppercase tracking-widest text-white/65 mb-1">Chef Station</p>
           <h1 className="text-3xl font-royal gold-text-gradient">Kitchen Command</h1>
         </div>
         <div className="flex items-center gap-3">
@@ -156,8 +156,8 @@ const ChefDashboard = () => {
               onClick={() => setFilter(f)}
               className={`px-4 py-2 rounded-full text-xs uppercase tracking-widest font-medium transition-all border
                 ${filter === f
-                  ? 'border-royal-gold bg-royal-gold/10 text-royal-gold'
-                  : 'border-white/10 text-gray-500 hover:text-royal-gold hover:border-royal-gold/30'}`}
+                  ? 'border-white bg-white/10 text-white'
+                  : 'border-white/10 text-gray-500 hover:text-white hover:border-white/40'}`}
             >
               {f === 'all' ? 'All Orders' : 'My Orders'}
             </button>
@@ -172,10 +172,10 @@ const ChefDashboard = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="flex items-center gap-4 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 overflow-hidden"
+            className="flex items-center gap-4 p-4 rounded-2xl bg-white/8 border border-white/20 overflow-hidden"
           >
-            <Bell className="text-amber-400 shrink-0" size={18} />
-            <span className="text-sm text-amber-400">{alert}</span>
+            <Bell className="text-white shrink-0" size={18} />
+            <span className="text-sm text-gray-100">{alert}</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -183,9 +183,9 @@ const ChefDashboard = () => {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-5">
         {[
-          { label: 'Awaiting Prep', val: stats.pending, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
-          { label: 'In Progress', val: stats.cooking, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
-          { label: 'Ready to Serve', val: stats.ready, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
+          { label: 'Awaiting Prep', val: stats.pending, color: 'text-white', bg: 'bg-white/10', border: 'border-white/20' },
+          { label: 'In Progress', val: stats.cooking, color: 'text-white', bg: 'bg-white/10', border: 'border-white/20' },
+          { label: 'Ready to Serve', val: stats.ready, color: 'text-white', bg: 'bg-white/10', border: 'border-white/20' },
         ].map((s, i) => (
           <motion.div
             key={i}
@@ -208,7 +208,7 @@ const ChefDashboard = () => {
           orders={myOrders.filter(o => o.status === 'pending')}
           status="pending"
           onAdvance={advanceStatus}
-          color={{ iconBg: 'bg-amber-500/10', icon: 'text-amber-400', badge: 'text-amber-400' }}
+          color={{ iconBg: 'bg-white/10', icon: 'text-white', badge: 'text-white' }}
         />
         <KanbanColumn
           title="Active Culinary"
@@ -216,7 +216,7 @@ const ChefDashboard = () => {
           orders={myOrders.filter(o => o.status === 'cooking')}
           status="cooking"
           onAdvance={advanceStatus}
-          color={{ iconBg: 'bg-blue-500/10', icon: 'text-blue-400', badge: 'text-blue-400' }}
+          color={{ iconBg: 'bg-white/10', icon: 'text-white', badge: 'text-white' }}
         />
         <KanbanColumn
           title="Ready for Service"
@@ -224,7 +224,7 @@ const ChefDashboard = () => {
           orders={myOrders.filter(o => o.status === 'ready')}
           status="ready"
           onAdvance={advanceStatus}
-          color={{ iconBg: 'bg-emerald-500/10', icon: 'text-emerald-400', badge: 'text-emerald-400' }}
+          color={{ iconBg: 'bg-white/10', icon: 'text-white', badge: 'text-white' }}
         />
       </div>
     </div>

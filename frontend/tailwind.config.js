@@ -7,10 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        'royal-gold': '#cfa756',
-        'royal-amber': '#8b6e2f',
-        'royal-black': '#0c0c0c',
-        'royal-dark': '#1a1a1a',
+        'royal-gold': '#f5f5f5',
+        'royal-amber': '#a3a3a3',
+        'royal-black': '#050505',
+        'royal-dark': '#111111',
       },
       fontFamily: {
         'royal': ['Cinzel', 'serif'],
@@ -18,11 +18,11 @@ export default {
         'inter': ['Inter', 'sans-serif'],
       },
       boxShadow: {
-        'gold-glow': '0 0 20px rgba(207, 167, 86, 0.3)',
-        'gold-glow-strong': '0 0 40px rgba(207, 167, 86, 0.5)',
+        'gold-glow': '0 0 20px rgba(255, 255, 255, 0.2)',
+        'gold-glow-strong': '0 0 40px rgba(255, 255, 255, 0.3)',
       },
       backgroundImage: {
-        'gold-gradient': 'linear-gradient(to right, #cfa756, #8b6e2f)',
+        'gold-gradient': 'none',
       }
     },
   },

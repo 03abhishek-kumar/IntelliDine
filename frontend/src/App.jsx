@@ -11,15 +11,16 @@ import ReceptionDashboard from './pages/ReceptionDashboard';
 import useAuthStore from './store/useAuthStore';
 
 const AppShell = ({ children }) => (
-  <div className="flex flex-col h-screen bg-royal-black overflow-hidden">
+  <div className="flex flex-col h-screen overflow-hidden">
     <Navbar />
     <div className="flex flex-1 overflow-hidden">
       <Sidebar />
-      <main className="flex-1 overflow-auto bg-royal-black relative">
+      <main className="flex-1 overflow-auto relative">
         {/* Ambient glows */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-royal-gold/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-royal-amber/5 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
-        {children}
+        <div className="absolute top-[-240px] right-[-160px] w-[640px] h-[640px] bg-white/8 blur-[140px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-[-260px] left-[-180px] w-[620px] h-[620px] bg-white/7 blur-[140px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[540px] h-[540px] bg-white/6 blur-[130px] rounded-full pointer-events-none" />
+        <div className="relative z-10 h-full">{children}</div>
       </main>
     </div>
   </div>
