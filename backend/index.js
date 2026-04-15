@@ -1,31 +1,38 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const db = require('./db');
+const connectDB = require('./config/db');
+const orderRoutes = require('./routes/orders');
+const ingredientRoutes = require('./routes/ingredients');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.get('/api/status', (req, res) => {
-  res.json({ status: 'Server running' });
+app.get('/api/health', async (_req, res) => {
+  res.status(200).json({ message: 'Server is running' });
 });
 
-app.get('/api/db-test', async (req, res) => {
+app.use('/api/orders', orderRoutes);
+app.use('/api/ingredients', ingredientRoutes);
+
+app.use((err, _req, res, _next) => {
+  console.error('Unhandled server error:', err);
+  res.status(500).json({ message: 'Internal server error' });
+});
+
+const startServer = async () => {
   try {
-    const result = await db.query('SELECT NOW()');
-    res.json({ status: 'Database connected', time: result.rows[0].now });
-  } catch (err) {
-    console.error('Database connection error:', err);
-    res.status(500).json({ error: 'Database connection failed', details: err.message });
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error.message);
+    process.exit(1);
   }
-});
+};
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+startServer();

@@ -4,7 +4,7 @@ import useOrderStore from '../store/useOrderStore';
 import RoyalCard from '../components/RoyalCard';
 import { ChefHat, Flame, CheckCircle2, AlertTriangle, ArrowDown } from 'lucide-react';
 
-const DashboardColumn = ({ title, icon: Icon, orders, status, onAdvance }) => (
+const DashboardColumn = ({ title, icon: Icon, orders, onAdvance }) => (
   <div className="flex flex-col gap-6">
     <div className="flex items-center justify-between px-2">
       <div className="flex items-center gap-3">
@@ -146,21 +146,18 @@ const Home = () => {
           title="Grand Preparation" 
           icon={ChefHat} 
           orders={pendingOrders} 
-          status="pending"
           onAdvance={advanceStatus}
         />
         <DashboardColumn 
           title="Active Culinary" 
           icon={Flame} 
           orders={cookingOrders} 
-          status="cooking"
           onAdvance={advanceStatus}
         />
         <DashboardColumn 
           title="Ready to Serve" 
           icon={CheckCircle2} 
           orders={readyOrders} 
-          status="ready"
           onAdvance={advanceStatus}
         />
       </div>
